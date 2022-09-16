@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record model="ir.module.category" id="financiera_veraz_management">
+      <field name="name">Financiera Veraz</field>
+      <field name="description">Nivel de acceso</field>
+      <field name="sequence">7</field>
+    </record>
+
+    <record id="user" model="res.groups">
+      <field name="name">Usuario</field>
+      <field name="category_id" ref="financiera_veraz_management" />
+    </record>
+
+    <record id="manager" model="res.groups">
+      <field name="name">Administrador</field>
+      <field name="category_id" ref="financiera_veraz_management" />
+      <field name="implied_ids" eval="[(4, ref('user'))]" />
+    </record>
+
+    <!-- PERMISOS ESPECIALES -->
+
+    <record model="ir.module.category" id="financiera_veraz_permisos_generales">
+      <field name="name">Financiera Veraz Permisos Especiales</field>
+      <field name="description">Nivel de acceso</field>
+      <field name="sequence">0</field>
+    </record>
+
+    <record id="ver_informe" model="res.groups">
+      <field name="name">Ver informe desde ficha del cliente</field>
+      <field name="category_id" ref="financiera_veraz_permisos_generales" />
+    </record>
+
+    <record id="solicitar_informe" model="res.groups">
+      <field name="name">Solicitar informe desde ficha del cliente</field>
+      <field name="category_id" ref="financiera_veraz_permisos_generales" />
+    </record>
+
+    <!-- Permisos necesarios si es usuario de financiera o de portal -->
+
+    <record id="financiera_prestamos.user" model="res.groups">
+      <field name="implied_ids" eval="[(4, ref('user'))]" />
+    </record>
+
+  </data>
+</openerp>

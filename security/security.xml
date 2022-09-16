@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<!-- <data noupdate="0"> -->
+		<record id="veraz_config_rule" model="ir.rule">
+			<field name="name">Veraz Configuracion multi-company</field>
+			<field name="model_id" ref="model_financiera_veraz_configuracion"/>
+			<field eval="True" name="global"/>
+			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+		</record>
+
+		<record id="veraz_informe_rule" model="ir.rule">
+			<field name="name">Veraz Informe multi-company</field>
+			<field name="model_id" ref="model_financiera_veraz_informe"/>
+			<field eval="True" name="global"/>
+			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+		</record>
+
+		<record id="veraz_informe_variable_rule" model="ir.rule">
+			<field name="name">Veraz Informe Variable multi-company</field>
+			<field name="model_id" ref="model_financiera_veraz_informe_variable"/>
+			<field eval="True" name="global"/>
+			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+		</record>
+
+		<record id="veraz_cda_rule" model="ir.rule">
+			<field name="name">Veraz CDA multi-company</field>
+			<field name="model_id" ref="model_financiera_veraz_cda"/>
+			<field eval="True" name="global"/>
+			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+		</record>
+
+		<!-- <record id="veraz_cuestionario_rule" model="ir.rule">
+			<field name="name">Veraz Cuestionario multi-company</field>
+			<field name="model_id" ref="model_financiera_veraz_cuestionario"/>
+			<field eval="True" name="global"/>
+			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+		</record>
+
+		<record id="veraz_cuestionario_pregunta_rule" model="ir.rule">
+			<field name="name">Veraz Pregunta multi-company</field>
+			<field name="model_id" ref="model_financiera_veraz_cuestionario_pregunta"/>
+			<field eval="True" name="global"/>
+			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+		</record>
+
+		<record id="veraz_cuestionario_pregunta_opcion_rule" model="ir.rule">
+			<field name="name">Veraz Pregunta Opcion multi-company</field>
+			<field name="model_id" ref="model_financiera_veraz_cuestionario_pregunta_opcion"/>
+			<field eval="True" name="global"/>
+			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
+		</record> -->
+
+	<!-- </data>  -->
+</openerp>
