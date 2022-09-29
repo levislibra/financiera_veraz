@@ -28,6 +28,9 @@
                 <field name="company_id" groups="base.group_erp_manager" />
                 <field name="name" />
                 <separator string="Información conexión" colspan="2" />
+                <field name="token"/>
+                <field name="client_id"/>
+                <field name="client_secret"/>
                 <field name="matriz"/>
                 <field name="usuario"/>
                 <field name="password"/>
@@ -44,29 +47,13 @@
             </group>
             <group>
               <group string="Asignar al perfil del cliente">
-                <field name="asignar_nombre_cliente" />
-                <field name="asignar_nombre_cliente_variable" attrs="{'invisible': [('asignar_nombre_cliente','=',False)]}" />
-
-                <field name="asignar_direccion_cliente" />
-                <field name="asignar_calle_cliente_variable" attrs="{'invisible': [('asignar_direccion_cliente','=',False)]}" />
-                <field name="asignar_nro_cliente_variable" attrs="{'invisible': [('asignar_direccion_cliente','=',False)]}" />
-                <field name="asignar_piso_cliente_variable" attrs="{'invisible': [('asignar_direccion_cliente','=',False)]}" />
-                <field name="asignar_departamento_cliente_variable" attrs="{'invisible': [('asignar_direccion_cliente','=',False)]}" />
-
-                <field name="asignar_ciudad_cliente" />
-                <field name="asignar_ciudad_cliente_variable" attrs="{'invisible': [('asignar_ciudad_cliente','=',False)]}" />
-
-                <field name="asignar_cp_cliente" />
-                <field name="asignar_cp_cliente_variable" attrs="{'invisible': [('asignar_cp_cliente','=',False)]}" />
-
-                <field name="asignar_provincia_cliente" />
-                <field name="asignar_provincia_cliente_variable" attrs="{'invisible': [('asignar_provincia_cliente','=',False)]}" />
-
-                <field name="asignar_identificacion_cliente" />
-                <field name="asignar_identificacion_cliente_variable" attrs="{'invisible': [('asignar_identificacion_cliente','=',False)]}" />
-
-                <field name="asignar_genero_cliente" />
-                <field name="asignar_genero_cliente_variable" attrs="{'invisible': [('asignar_genero_cliente','=',False)]}" />
+                <field name="asignar_nombre" />
+                <field name="asignar_direccion" />
+                <field name="asignar_ciudad" />
+                <field name="asignar_cp" />
+                <field name="asignar_provincia" />
+                <field name="asignar_identificacion" />
+                <field name="asignar_genero" />
               </group>
               <group string="Variables principales">
                 <field name="veraz_variable_1" />
