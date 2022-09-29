@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from openerp import models, fields, api
-from openerp.exceptions import UserError, ValidationError
+from openerp.exceptions import UserError, ValidationError, Warning
 import requests
+import json
+import base64
 
-ENDPOINT_VERAZ = 'https://ws01.veraz.com/rest/variables'
+
+ENDPOINT_VERAZ_TOKEN = "https://api.uat.latam.equifax.com/v2/oauth/token"
+ENDPOINT_VERAZ_SCOPE = 'https://api.latam.equifax.com/business/integration-api-efx/v1'
+
+ENDPOINT_VERAZ_TOKEN_IDVALIDATOR = "https://idp.equifax.com.ar/b/token?grant_type=client_credentials"
 
 class FinancieraVerazConfiguracion(models.Model):
 	_name = 'financiera.veraz.configuracion'
@@ -35,25 +41,63 @@ class FinancieraVerazConfiguracion(models.Model):
 	asignar_ciudad = fields.Boolean('Asignar Ciudad')
 	asignar_cp = fields.Boolean('Asignar CP')
 	asignar_provincia = fields.Boolean('Asignar Provincia')
-	asignar_identificacion = fields.Boolean('Asignar identificacion')
+	asignar_cuit = fields.Boolean('Asignar CUIT')
 	asignar_genero = fields.Boolean('Asignar genero')
 
 	company_id = fields.Many2one('res.company', 'Empresa', required=False, default=lambda self: self.env['res.company']._company_default_get('financiera.veraz.configuracion'))
 	
-	@api.one
-	def test_conexion(self):
-		params = {
-			'usuario': self.usuario,
-			'token': self.token,
+	def get_token_veraz_informes(self):
+		print('get_token_veraz_informes')
+		base64_string = base64.b64encode(self.client_id + ':' + self.client_secret)
+		headers = {"Authorization": "Basic " + base64_string}
+		data = {
+			"grant_type": "client_credentials",
+			'scope': ENDPOINT_VERAZ_SCOPE,
 		}
-		response = requests.get(ENDPOINT_VERAZ, params)
-		if response.status_code == 400:
-			raise UserError("La cuenta esta conectada.")
+		response = requests.post(
+			ENDPOINT_VERAZ_TOKEN,
+			headers=headers,
+			data=data,
+		)
+		if response.status_code != 200:
+			raise UserError('Error al obtener el token de Veraz')
+		j = response.json()
+		return j["access_token"]
+
+	@api.one
+	def test_conexion_informes(self):
+		token = self.get_token_veraz_informes()
+		if token:
+			raise Warning("La cuenta esta conectada. Token generado Informes: %s" % token)
 		else:
 			raise UserError("Error de conexion.")
 
-class ExtendsResCompany(models.Model):
-	_name = 'res.company'
-	_inherit = 'res.company'
+	def get_token_veraz_idvalidator(self):
+		print('get_token_veraz_idvalidator')
+		base64_string = base64.b64encode(self.usuario + ':' + self.password)
+		headers = {"Authorization": "Basic " + base64_string}
+		data = {
+			"grant_type": "client_credentials",
+		}
+		response = requests.post(
+			ENDPOINT_VERAZ_TOKEN_IDVALIDATOR,
+			headers=headers,
+			json=data,
+		)
+		print('response: ', response)
+		print('response.status_code: ', response.status_code)
+		print('response.text: ', response.text)
+		if response.status_code != 200:
+			raise UserError('Error al obtener el token de Veraz: %s' % json.loads(response.text)['errorSummary'])
+		j = response.json()
+		return j["access_token"]
 
-	veraz_configuracion_id = fields.Many2one('financiera.veraz.configuracion', 'Configuracion Veraz')
+	@api.one
+	def test_conexion_idvalidator(self):
+		token = self.get_token_veraz_idvalidator()
+		if token:
+			raise Warning("La cuenta esta conectada. Token generado Id Validator: %s" % token)
+		else:
+			raise UserError("Error de conexion.")
+
+

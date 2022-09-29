@@ -20,7 +20,8 @@
       <field name="arch" type="xml">
         <form string="Configuracion" create="false" delete="false">
           <header>
-            <button name="test_conexion" string="Probar conexión" type="object" />
+            <button name="test_conexion_idvalidator" string="Probar conexión Id Validator" type="object" />
+            <button name="test_conexion_informes" string="Probar conexión Informes" type="object" />
           </header>
           <sheet>
             <group>
@@ -52,7 +53,7 @@
                 <field name="asignar_ciudad" />
                 <field name="asignar_cp" />
                 <field name="asignar_provincia" />
-                <field name="asignar_identificacion" />
+                <field name="asignar_cuit" />
                 <field name="asignar_genero" />
               </group>
               <group string="Variables principales">

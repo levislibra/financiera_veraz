@@ -6,11 +6,19 @@ import requests
 import json
 import base64
 
-ENDPOINT_VERAZ_TOKEN = "https://api.uat.latam.equifax.com/v2/oauth/token"
-ENDPOINT_VERAZ_SCOPE = 'https://api.latam.equifax.com/business/integration-api-efx/v1'
 ENDPOINT_VERAZ_TEST = 'https://api.uat.latam.equifax.com/business/integration-api-efx/v1/wserv'
 ENDPOINT_VERAZ_PRODUCCION = 'https://api.dev.latam.equifax.com/business/integration-api-efx/v1/wserv'
 # ENDPOINT_VERAZ_VID = ''
+
+VARIABLES_VERAZ = {
+	'nombre': 'nombre',
+	'sexo': 'sexo',
+	'cuit': 'xxxx',
+	'direccion': 'xxxx',
+	'lodalidad': 'xxxx',
+	'provincia': 'xxxx',
+	'cp': 'xxxx',
+}
 
 class ExtendsResPartnerVeraz(models.Model):
 	_name = 'res.partner'
@@ -34,28 +42,11 @@ class ExtendsResPartnerVeraz(models.Model):
 	# veraz_cuestionario_ids = fields.One2many('financiera.veraz.cuestionario', 'partner_id', 'Veraz - Cuestionarios')
 	# veraz_cuestionario_id = fields.Many2one('financiera.veraz.cuestionario', 'Veraz - Cuestionario actual')
 
-	def get_token(self):
-		print('get_token')
-		veraz_configuracion_id = self.company_id.veraz_configuracion_id
-		base64_string = base64.b64encode(veraz_configuracion_id.client_id + ':' + veraz_configuracion_id.client_secret)
-		headers = {"Authorization": "Basic " + base64_string}
-		data = {
-			"grant_type": "client_credentials",
-			'scope': ENDPOINT_VERAZ_SCOPE,
-		}
-		response = requests.post(
-			ENDPOINT_VERAZ_TOKEN,
-			headers=headers,
-			data=data,
-		)
-		j = response.json()
-		return j["access_token"]
-
 	@api.one
 	def solicitar_informe_veraz(self):
 		veraz_configuracion_id = self.company_id.veraz_configuracion_id
 		if veraz_configuracion_id:
-			token = self.get_token()
+			token = veraz_configuracion_id.get_token_veraz_informes()
 			print("TOKEN: ", token)
 			headers = {
 				'Authorization': "Bearer " + token,
@@ -124,16 +115,53 @@ class ExtendsResPartnerVeraz(models.Model):
 				self.veraz_informe_ids = [nuevo_informe_id.id]
 				self.veraz_variable_ids = [(6, 0, [])]
 				nuevo_informe_id.write({'variable_ids': list_values})
-				self.asignar_variables()
-				# self.enriquecer_partner()
-				if veraz_configuracion_id.asignar_direccion:
-					if len(direccion) > 0:
-						self.street = ' '.join(direccion)
+				self.asignar_variables_veraz()
+				self.enriquecer_partner_veraz()
 				if veraz_configuracion_id.ejecutar_cda_al_solicitar_informe:
 					nuevo_informe_id.ejecutar_cdas()
 
 	@api.one
-	def asignar_variables(self):
+	def enriquecer_partner_veraz(self):
+		veraz_configuracion_id = self.company_id.veraz_configuracion_id
+		vals = {}
+		variable_apellido_id = False
+		variable_nombre_id = False
+		if veraz_configuracion_id.asignar_nombre:
+			variable_nombre_id = self.veraz_variable_ids.filtered(lambda x: x.name == VARIABLES_VERAZ['nombre'])
+			if variable_apellido_id and variable_nombre_id:
+				vals['name'] = variable_nombre_id.valor
+		if veraz_configuracion_id.asignar_direccion:
+			variable_direccion_id = self.veraz_variable_ids.filtered(lambda x: x.name == VARIABLES_VERAZ['direccion'])
+			if variable_direccion_id:
+				vals['street'] = variable_direccion_id.valor
+		if veraz_configuracion_id.asignar_ciudad:
+			variable_ciudad_id = self.veraz_variable_ids.filtered(lambda x: x.name == VARIABLES_VERAZ['lodalidad'])
+			if variable_ciudad_id:
+				vals['city'] = variable_ciudad_id.valor
+		if veraz_configuracion_id.asignar_cp:
+			variable_cp_id = self.veraz_variable_ids.filtered(lambda x: x.name == VARIABLES_VERAZ['cp'])
+			if variable_cp_id:
+				vals['zip'] = variable_cp_id.valor
+		if veraz_configuracion_id.asignar_provincia:
+			variable_provincia_id = self.veraz_variable_ids.filtered(lambda x: x.name == VARIABLES_VERAZ['provincia'])
+			if variable_provincia_id:
+				self.set_provincia(variable_provincia_id.valor)
+		if veraz_configuracion_id.asignar_cuit:
+			variable_cuit_id = self.veraz_variable_ids.filtered(lambda x: x.name == VARIABLES_VERAZ['cuit'])
+			if variable_cuit_id:
+				vals['main_id_category_id'] = 25
+				vals['main_id_number'] = variable_cuit_id.valor
+		if veraz_configuracion_id.asignar_genero:
+			variable_genero_id = self.veraz_variable_ids.filtered(lambda x: x.name == VARIABLES_VERAZ['sexo'])
+			if variable_genero_id:
+				if variable_genero_id.valor == 'M':
+					vals['sexo'] = 'masculino'
+				elif variable_genero_id.valor == 'F':
+					vals['sexo'] = 'femenino'
+		self.write(vals)
+
+	@api.one
+	def asignar_variables_veraz(self):
 		variable_1 = False
 		variable_2 = False
 		variable_3 = False
