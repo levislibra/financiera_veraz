@@ -215,6 +215,21 @@ class ExtendsResPartnerVeraz(models.Model):
 		self.veraz_cuestionario_id = cuestionario_id.id
 		cuestionario_id.obtener_preguntas()
 
+	@api.multi
+	def ver_cuestionario_actual(self):
+		self.ensure_one()
+		view_id = self.env.ref('financiera_veraz.financiera_veraz_cuestionario_form', False)
+		return {
+			'name': 'Pregunta de ID Validator',
+			'type': 'ir.actions.act_window',
+			'view_type': 'form',
+			'view_mode': 'form',
+			'res_model': 'financiera.veraz.cuestionario',
+			'res_id': self.veraz_cuestionario_id.id,
+			'views': [(view_id.id, 'form')],
+			'view_id': view_id.id,
+			'target': 'new',
+		}
 
 	@api.multi
 	def veraz_report(self):

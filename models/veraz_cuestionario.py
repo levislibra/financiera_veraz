@@ -21,6 +21,7 @@ class FinancieraVerazCuestionario(models.Model):
 	pregunta_3_id = fields.Many2one('financiera.veraz.cuestionario.pregunta', 'Pregunta 3')
 	pregunta_4_id = fields.Many2one('financiera.veraz.cuestionario.pregunta', 'Pregunta 4')
 	pregunta_5_id = fields.Many2one('financiera.veraz.cuestionario.pregunta', 'Pregunta 5')
+	pregunta_actual_id = fields.Many2one('financiera.veraz.cuestionario.pregunta', 'Pregunta actual', compute='_compute_pregunta_actual_id')
 	# respuestas_test = fields.Char('Respuestas test')
 	# cuestionario = fields.Char('Respuestas', compute='_compute_cuestionario')
 	state = fields.Selection([('pendiente', 'Pendiente'), ('rechazado', 'Rechazado'), ('aprobado', 'Aprobado')], string='Estado', default='pendiente')
@@ -105,6 +106,37 @@ class FinancieraVerazCuestionario(models.Model):
 			if len(self.pregunta_ids) > 4:
 				self.pregunta_5_id = self.pregunta_ids[4]
 			self.state_pregunta = 'pregunta_1'
+
+	@api.multi
+	def ver_pregunta_actual(self):
+		self.ensure_one()
+		print('pregunta_actual_id', self.pregunta_actual_id)
+		view_id = self.env.ref('financiera_veraz.financiera_veraz_cuestionario_pregunta_form', False)
+		return {
+			'name': 'Pregunta de ID Validator',
+			'type': 'ir.actions.act_window',
+			'view_type': 'form',
+			'view_mode': 'form',
+			'res_model': 'financiera.veraz.cuestionario.pregunta',
+			'res_id': self.pregunta_actual_id.id,
+			'views': [(view_id.id, 'form')],
+			'view_id': view_id.id,
+			'target': 'new',
+		}
+
+	@api.one
+	def _compute_pregunta_actual_id(self):
+		self.pregunta_actual_id = False
+		if self.state_pregunta == 'pregunta_1':
+			self.pregunta_actual_id = self.pregunta_1_id
+		elif self.state_pregunta == 'pregunta_2':
+			self.pregunta_actual_id = self.pregunta_2_id
+		elif self.state_pregunta == 'pregunta_3':
+			self.pregunta_actual_id = self.pregunta_3_id
+		elif self.state_pregunta == 'pregunta_4':
+			self.pregunta_actual_id = self.pregunta_4_id
+		elif self.state_pregunta == 'pregunta_5':
+			self.pregunta_actual_id = self.pregunta_5_id
 
 class FinancieraVerazCuestionarioPregunta(models.Model):
 	_name = 'financiera.veraz.cuestionario.pregunta'

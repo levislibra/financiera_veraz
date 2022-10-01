@@ -24,8 +24,8 @@
 			<field name="arch" type="xml">
 				<form>
 					<header>
-						<button name="iniciar_cuestionario" string="Iniciar Cuestionario" type="object" class="oe_highlight"/>
 						<field name="state" widget="statusbar"/>
+						<button name="iniciar_cuestionario" string="Iniciar Cuestionario" type="object" class="oe_highlight"/>
 						<field name="state_pregunta" widget="statusbar" clickable="1"/>
 					</header>
 					<sheet>
@@ -58,10 +58,33 @@
 							</field>
 						</group>
 						<group attrs="{'invisible': [('state_pregunta', '!=', 'pregunta_1')]}">
-							<field name="pregunta_1_id"/>
+							<button string="Ver pregunta" name="ver_pregunta_actual" type="object" class="oe_highlight"/>
 						</group>
 						<group  attrs="{'invisible': [('state_pregunta', '!=', 'pregunta_2')]}">
-							<field name="pregunta_2_id"/>
+							<button string="Ver pregunta" name="ver_pregunta_actual" type="object" class="oe_highlight"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="financiera_veraz_cuestionario_pregunta_form" model="ir.ui.view">
+			<field name="name">financiera.veraz.cuestionario.pregunta.form</field>
+			<field name="model">financiera.veraz.cuestionario.pregunta</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<field name="texto"/>
+							<field name="id_respuesta"/>
+							<field name="opcion_ids">
+								<tree>
+									<field name="id_opcion"/>
+									<field name="texto"/>
+									<field name="respuesta"/>
+									<button string="Seleccionar" name="set_opcion_correcta" type="object"/>
+								</tree>
+							</field>
 						</group>
 					</sheet>
 				</form>
