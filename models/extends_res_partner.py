@@ -39,8 +39,8 @@ class ExtendsResPartnerVeraz(models.Model):
 
 
 	# Validacion por cuestionario
-	# veraz_cuestionario_ids = fields.One2many('financiera.veraz.cuestionario', 'partner_id', 'Veraz - Cuestionarios')
-	# veraz_cuestionario_id = fields.Many2one('financiera.veraz.cuestionario', 'Veraz - Cuestionario actual')
+	veraz_cuestionario_ids = fields.One2many('financiera.veraz.cuestionario', 'partner_id', 'Veraz - Cuestionarios')
+	veraz_cuestionario_id = fields.Many2one('financiera.veraz.cuestionario', 'Veraz - Cuestionario actual')
 
 	@api.one
 	def solicitar_informe_veraz(self):
@@ -209,53 +209,12 @@ class ExtendsResPartnerVeraz(models.Model):
 	def button_solicitar_informe_veraz(self):
 		self.solicitar_informe_veraz()
 
-	# def obtener_cuestionario_veraz(self):
-	# 	ret = False
-	# 	veraz_configuracion_id = self.company_id.veraz_configuracion_id
-	# 	grupoVid = veraz_configuracion_id.nro_grupo_vid
-	# 	if len(self.veraz_cuestionario_id) > 0:
-	# 		grupoVid = veraz_configuracion_id.nro_grupo_vid2
-	# 	params = {
-	# 		'usuario': veraz_configuracion_id.usuario,
-	# 		'token': veraz_configuracion_id.token,
-	# 		'NroGrupoVID': grupoVid,
-	# 		'documento': self.main_id_number,
-	# 		'format': 'json',
-	# 	}
-	# 	response = requests.get(ENDPOINT_VERAZ_VID, params)
-	# 	data = response.json()
-	# 	if response.status_code != 200:
-	# 		raise ValidationError("Error en la obtencion del cuestionario Veraz: "+data['Contenido']['Resultado']['Novedad'])
-	# 	else:
-	# 		if data['Contenido']['Resultado']['Estado'] != 200:
-	# 			raise ValidationError("Veraz: " + data['Contenido']['Resultado']['Novedad'])
-	# 		nuevo_cuestionario_id = self.env['financiera.veraz.cuestionario'].create({})
-	# 		self.veraz_cuestionario_ids = [nuevo_cuestionario_id.id]
-	# 		self.veraz_cuestionario_id = nuevo_cuestionario_id.id
-	# 		nuevo_cuestionario_id.id_consulta = data['Contenido']['Datos']['IdConsulta']
-	# 		desafios = data['Contenido']['Datos']['Cuestionario']['Desafios']
-	# 		for desafio in desafios:
-	# 			if 'Pregunta' in desafio:
-	# 				pregunta = desafio['Pregunta']
-	# 				pregunta_id = self.env['financiera.veraz.cuestionario.pregunta'].create({
-	# 					'id_pregunta': pregunta['IdPregunta'],
-	# 					'texto': pregunta['Texto'],
-	# 				})
-	# 				nuevo_cuestionario_id.pregunta_ids = [pregunta_id.id]
-	# 				i = 0
-	# 				for opcion in pregunta['Opciones']:
-	# 					opcion_id = self.env['financiera.veraz.cuestionario.pregunta.opcion'].create({
-	# 						'id_opcion': i,
-	# 						'texto': opcion,
-	# 					})
-	# 					i += 1
-	# 					pregunta_id.opcion_ids = [opcion_id.id]
-	# 		ret = nuevo_cuestionario_id.id
-	# 	return ret
+	@api.one
+	def button_obtener_cuestionario_veraz(self):
+		cuestionario_id = self.env['financiera.veraz.cuestionario'].create({'partner_id': self.id})
+		self.veraz_cuestionario_id = cuestionario_id.id
+		cuestionario_id.obtener_preguntas()
 
-	# @api.one
-	# def button_obtener_cuestionario_veraz(self):
-	# 	self.obtener_cuestionario_veraz()
 
 	@api.multi
 	def veraz_report(self):

@@ -31,7 +31,7 @@
         'views/veraz_informe.xml',
         'views/veraz_cda.xml',
         'views/extends_res_partner.xml',
-        # 'views/veraz_cuestionario.xml',
+        'views/veraz_cuestionario.xml',
         # 'wizards/veraz_pregunta_wizard.xml',
         # 'reports/veraz_reports.xml',
         # 'data/ir_cron.xml',

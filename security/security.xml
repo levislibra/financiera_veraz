@@ -29,7 +29,7 @@
 			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
 		</record>
 
-		<!-- <record id="veraz_cuestionario_rule" model="ir.rule">
+		<record id="veraz_cuestionario_rule" model="ir.rule">
 			<field name="name">Veraz Cuestionario multi-company</field>
 			<field name="model_id" ref="model_financiera_veraz_cuestionario"/>
 			<field eval="True" name="global"/>
@@ -48,7 +48,7 @@
 			<field name="model_id" ref="model_financiera_veraz_cuestionario_pregunta_opcion"/>
 			<field eval="True" name="global"/>
 			<field name="domain_force">[('company_id','child_of',[user.company_id.id])]</field>
-		</record> -->
+		</record>
 
 	<!-- </data>  -->
 </openerp>

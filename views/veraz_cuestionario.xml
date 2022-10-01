@@ -1,0 +1,88 @@
+<openerp>
+	<data>
+
+		<!-- Lista de cuestionarios -->
+		<record model="ir.ui.view" id="financiera_veraz_cuestionario_tree">
+			<field name="name">financiera.veraz.cuestionario.tree</field>
+			<field name="model">financiera.veraz.cuestionario</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="create_date" string="Fecha"/>
+					<field name="name"/>
+					<field name="name_cuestionario"/>
+					<field name="score"/>
+					<field name="state"/>
+					<field name="company_id" groups="base.group_erp_manager" />
+				</tree>
+			</field>
+		</record>
+
+
+		<record id="financiera_veraz_cuestionario_form" model="ir.ui.view">
+			<field name="name">financiera.veraz.cuestionario.form</field>
+			<field name="model">financiera.veraz.cuestionario</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+						<button name="iniciar_cuestionario" string="Iniciar Cuestionario" type="object" class="oe_highlight"/>
+						<field name="state" widget="statusbar"/>
+						<field name="state_pregunta" widget="statusbar" clickable="1"/>
+					</header>
+					<sheet>
+						<group attrs="{'invisible': [('state_pregunta', '!=', 'inicial')]}">
+							<field name="name"/>
+							<field name="name_cuestionario"/>
+							<label for="score" string="Score"/>
+							<h2><field name="score"/></h2>
+							<field name="pregunta_ids">
+								<tree>
+									<field name="texto"/>
+									<field name="id_respuesta"/>
+								</tree>
+								<form>
+									<sheet>
+										<group>
+											<field name="texto"/>
+											<field name="id_respuesta"/>
+											<field name="opcion_ids">
+												<tree>
+													<field name="id_opcion"/>
+													<field name="texto"/>
+													<field name="respuesta"/>
+													<button string="Seleccionar" name="set_opcion_correcta" type="object"/>
+												</tree>
+											</field>
+										</group>
+									</sheet>
+								</form>
+							</field>
+						</group>
+						<group attrs="{'invisible': [('state_pregunta', '!=', 'pregunta_1')]}">
+							<field name="pregunta_1_id"/>
+						</group>
+						<group  attrs="{'invisible': [('state_pregunta', '!=', 'pregunta_2')]}">
+							<field name="pregunta_2_id"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<!-- 
+		<record model="ir.actions.act_window" id="financiera_veraz_cuestionario_action">
+			<field name="name">CDA</field>
+			<field name="res_model">financiera.veraz.cuestionario</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="financiera_veraz_cuestionario_tree" />
+		</record> 
+		-->
+
+		<!-- menu categories -->
+
+		<!-- 
+		<menuitem name="cuestionarios" id="menu_cuestionarios" sequence="18" parent="menu_veraz" />
+		<menuitem name="cuestionarios" id="menu_cuestionarios_action" sequence="1" parent="menu_cuestionarios" action="financiera_veraz_cuestionario_action" /> 
+		-->
+
+	</data>
+</openerp>

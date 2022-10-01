@@ -15,7 +15,6 @@
 								<button name="ejecutar_cdas_veraz" string="Ejecutar CDAs" type="object" confirm="Desea ejecutar el CDA?" />
 								<button name="veraz_report" string="Imprimir informe Veraz" type="object" />
 								<button name="button_obtener_cuestionario_veraz" string="Obtener cuestionario" type="object" confirm="Desea obtener el cuestionario?" groups="financiera_veraz.solicitar_informe" />
-								<!-- <field name='veraz_cuestionario_id' /> -->
 							</group>
 							<group string="Otorgamiento" col="1" style="background-color: lightsteelblue;">
 								<field name="veraz_capacidad_pago_mensual" readonly="1" />
@@ -41,7 +40,7 @@
 								</field>
 							</group>
 							<group col="1">
-								<!-- <field name='veraz_cuestionario_id' /> -->
+								<field name='veraz_cuestionario_id' />
 							</group>
 						</group>
 						<group string="Informes historicos" col="2">
@@ -54,7 +53,7 @@
 								</field>
 							</group>
 							<group col="1">
-								<!-- <field name='veraz_cuestionario_ids' /> -->
+								<field name='veraz_cuestionario_ids'/>
 							</group>
 						</group>
 					</page>

@@ -26,10 +26,7 @@ class FinancieraVerazConfiguracion(models.Model):
 	sucursal = fields.Char('Sucursal')
 	
 	ejecutar_cda_al_solicitar_informe = fields.Boolean('Ejecutar CDAs al solicitar informe')
-	solicitar_informe_enviar_a_revision = fields.Boolean('Solicitar informe al enviar a revision')
-	vr = fields.Integer('Grupo de variables')
-	nro_grupo_vid = fields.Integer('Grupo VID')
-	nro_grupo_vid2 = fields.Integer('Grupo VID 2do intento')
+	id_cuestionario = fields.Char('Cuestionario ID')
 	veraz_variable_1 = fields.Char('Variable 1')
 	veraz_variable_2 = fields.Char('Variable 2')
 	veraz_variable_3 = fields.Char('Variable 3')
@@ -47,7 +44,6 @@ class FinancieraVerazConfiguracion(models.Model):
 	company_id = fields.Many2one('res.company', 'Empresa', required=False, default=lambda self: self.env['res.company']._company_default_get('financiera.veraz.configuracion'))
 	
 	def get_token_veraz_informes(self):
-		print('get_token_veraz_informes')
 		base64_string = base64.b64encode(self.client_id + ':' + self.client_secret)
 		headers = {"Authorization": "Basic " + base64_string}
 		data = {
@@ -73,7 +69,6 @@ class FinancieraVerazConfiguracion(models.Model):
 			raise UserError("Error de conexion.")
 
 	def get_token_veraz_idvalidator(self):
-		print('get_token_veraz_idvalidator')
 		base64_string = base64.b64encode(self.usuario + ':' + self.password)
 		headers = {"Authorization": "Basic " + base64_string}
 		data = {
@@ -84,9 +79,6 @@ class FinancieraVerazConfiguracion(models.Model):
 			headers=headers,
 			json=data,
 		)
-		print('response: ', response)
-		print('response.status_code: ', response.status_code)
-		print('response.text: ', response.text)
 		if response.status_code != 200:
 			raise UserError('Error al obtener el token de Veraz: %s' % json.loads(response.text)['errorSummary'])
 		j = response.json()
