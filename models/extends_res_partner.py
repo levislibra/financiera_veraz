@@ -24,6 +24,7 @@ class ExtendsResPartnerVeraz(models.Model):
 	_name = 'res.partner'
 	_inherit = 'res.partner'
 
+	veraz_contratado = fields.Boolean('Veraz contratado', compute='_compute_veraz_contrtado')
 	veraz_informe_ids = fields.One2many('financiera.veraz.informe', 'partner_id', 'Veraz - Informes')
 	veraz_variable_ids = fields.One2many('financiera.veraz.informe.variable', 'partner_id', 'Variables')
 	veraz_variable_1 = fields.Char('Variable 1')
@@ -33,14 +34,16 @@ class ExtendsResPartnerVeraz(models.Model):
 	veraz_variable_5 = fields.Char('Variable 5')
 	veraz_capacidad_pago_mensual = fields.Float('Veraz - CPM', digits=(16,2))
 	veraz_partner_tipo_id = fields.Many2one('financiera.partner.tipo', 'Veraz - Tipo de cliente')
-
-
+	
 	pregunta_ids = fields.Char('Preguntas')
-
 
 	# Validacion por cuestionario
 	veraz_cuestionario_ids = fields.One2many('financiera.veraz.cuestionario', 'partner_id', 'Veraz - Cuestionarios')
 	veraz_cuestionario_id = fields.Many2one('financiera.veraz.cuestionario', 'Veraz - Cuestionario actual')
+
+	@api.one
+	def _compute_veraz_contrtado(self):
+		self.veraz_contratado = True if self.company_id.veraz_configuracion_id else False
 
 	@api.one
 	def solicitar_informe_veraz(self):

@@ -32,6 +32,7 @@ class FinancieraVerazCuestionario(models.Model):
 	id_cuestionario_generado = fields.Char('Cuestionario generado ID')
 	id_transaccion = fields.Char('Transacción ID')
 	transaction_state_description = fields.Char('Estado de transaccion')
+	transaction_state_code = fields.Selection([(1, 'Aprobado'), (2, 'En proceso'), (3, 'Desaprobada')], string='Codigo de transaccion')
 	score = fields.Integer('Score')
 	company_id = fields.Many2one('res.company', 'Empresa', required=False, default=lambda self: self.env['res.company']._company_default_get('financiera.veraz.cuestionario'))
 	
@@ -72,8 +73,9 @@ class FinancieraVerazCuestionario(models.Model):
 		if response.status_code != 200 or ('errors' in data and data['errors']):
 			raise ValidationError("Error en la obtencion del cuestionario Veraz: " + data['errors'][0]['message'])
 		else:
-			self.id_cuestionario_generado = data['payload']
 			self.id_transaccion = data['payload']['idTransaccion']
+			self.transaction_state_description = data['payload']['transactionStateDescription']
+			self.transaction_state_code = data['payload']['transactionStateCode']
 			cuestionario = data['payload']['questionnaire']
 			print('cuestionario id', cuestionario['id'])
 			self.name_cuestionario = cuestionario['name']
@@ -204,6 +206,7 @@ class FinancieraVerazCuestionario(models.Model):
 		else:
 			self.score = data['payload']['score']
 			self.transaction_state_description = data['payload']['transactionStateDescription']
+			self.transaction_state_code = data['payload']['transactionStateCode']
 
 class FinancieraVerazCuestionarioPregunta(models.Model):
 	_name = 'financiera.veraz.cuestionario.pregunta'
