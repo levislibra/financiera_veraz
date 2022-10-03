@@ -10,6 +10,7 @@
 					<field name="create_date" string="Fecha"/>
 					<field name="name"/>
 					<field name="name_cuestionario"/>
+					<field name="transaction_state_description"/>
 					<field name="score"/>
 					<field name="state"/>
 					<field name="company_id" groups="base.group_erp_manager" />
@@ -25,15 +26,21 @@
 				<form>
 					<header>
 						<field name="state" widget="statusbar"/>
-						<button name="iniciar_cuestionario" string="Iniciar Cuestionario" type="object" class="oe_highlight"/>
+						<button name="iniciar_cuestionario" string="Iniciar Cuestionario" attrs="{'invisible': [('state_pregunta', '!=', 'inicial')]}" type="object" class="oe_highlight"/>
+						<button name="evaluar_cuestionario" string="Evaluar cuestionario" type="object" class="oe_highlight"/>
+						<button name="get_dict_respuestas" string="Imprimir respuestas dict" type="object" class="oe_highlight"/>
 						<field name="state_pregunta" widget="statusbar" clickable="1"/>
 					</header>
 					<sheet>
-						<group attrs="{'invisible': [('state_pregunta', '!=', 'inicial')]}">
-							<field name="name"/>
-							<field name="name_cuestionario"/>
+						<group attrs="{'invisible': [('state_pregunta', 'not in', ('inicial','finalizado'))]}">
+							<field name="name" readonly="1"/>
+							<field name="name_cuestionario" readonly="1"/>
+							<field name="id_cuestionario_generado" />
+							<field name="id_transaccion"/>
 							<label for="score" string="Score"/>
 							<h2><field name="score"/></h2>
+							<label for="transaction_state_description" string="Estado"/>
+							<h2><field name="transaction_state_description"/></h2>
 							<field name="pregunta_ids">
 								<tree>
 									<field name="texto"/>
@@ -57,11 +64,12 @@
 								</form>
 							</field>
 						</group>
-						<group attrs="{'invisible': [('state_pregunta', '!=', 'pregunta_1')]}">
-							<button string="Ver pregunta" name="ver_pregunta_actual" type="object" class="oe_highlight"/>
-						</group>
-						<group  attrs="{'invisible': [('state_pregunta', '!=', 'pregunta_2')]}">
-							<button string="Ver pregunta" name="ver_pregunta_actual" type="object" class="oe_highlight"/>
+						<group attrs="{'invisible': [('state_pregunta', 'in', ('inicial','finalizado'))]}" col="1">
+							<field name="pregunta_actual_texto"/>
+							<group>
+								<button string="Ver opciones y responder" name="ver_pregunta_actual" type="object" class="oe_highlight"/>
+								<button string="Siguiente pregunta" name="siguiente_pregunta" type="object" class="oe_highlight"/>
+							</group>
 						</group>
 					</sheet>
 				</form>
