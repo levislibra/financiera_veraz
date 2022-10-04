@@ -24,7 +24,7 @@ class ExtendsResPartnerVeraz(models.Model):
 	_name = 'res.partner'
 	_inherit = 'res.partner'
 
-	veraz_contratado = fields.Boolean('Veraz contratado', compute='_compute_veraz_contrtado')
+	veraz_contratado = fields.Boolean('Veraz', compute='_compute_veraz_contrtado')
 	veraz_informe_ids = fields.One2many('financiera.veraz.informe', 'partner_id', 'Veraz - Informes')
 	veraz_variable_ids = fields.One2many('financiera.veraz.informe.variable', 'partner_id', 'Variables')
 	veraz_variable_1 = fields.Char('Variable 1')

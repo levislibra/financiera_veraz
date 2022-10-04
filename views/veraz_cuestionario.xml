@@ -10,9 +10,9 @@
 					<field name="create_date" string="Fecha"/>
 					<field name="name"/>
 					<field name="name_cuestionario"/>
-					<field name="transaction_state_description"/>
+					<!-- <field name="transaction_state_description"/> -->
 					<field name="score"/>
-					<field name="state"/>
+					<field name="transaction_state_code"/>
 					<field name="company_id" groups="base.group_erp_manager" />
 				</tree>
 			</field>
@@ -25,10 +25,12 @@
 			<field name="arch" type="xml">
 				<form>
 					<header>
-						<field name="state" widget="statusbar"/>
+						<field name="transaction_state_code" widget="statusbar"/>
 						<button name="iniciar_cuestionario" string="Iniciar Cuestionario" attrs="{'invisible': [('state_pregunta', '!=', 'inicial')]}" type="object" class="oe_highlight"/>
 						<button name="evaluar_cuestionario" string="Evaluar cuestionario" type="object" class="oe_highlight"/>
-						<button name="get_dict_respuestas" string="Imprimir respuestas dict" type="object" class="oe_highlight"/>
+						<button name="button_set_respuestas" string="button_set_respuestas" type="object" class="oe_highlight"/>
+						<button name="button_set_respuestas" string="button_set_respuestas" type="object" class="oe_highlight"/>
+						<button name="button_get_cuestionario_to_dict" string="Cbutton_get_cuestionario_to_dict" type="object" class="oe_highlight"/>
 						<field name="state_pregunta" widget="statusbar" clickable="1"/>
 					</header>
 					<sheet>
@@ -37,6 +39,8 @@
 							<field name="name_cuestionario" readonly="1"/>
 							<field name="id_cuestionario_generado" />
 							<field name="id_transaccion"/>
+							<field name="cuestionario" readonly="1"/>
+							<field name="respuestas_test"/>
 							<label for="score" string="Score"/>
 							<h2><field name="score"/></h2>
 							<label for="transaction_state_description" string="Estado"/>

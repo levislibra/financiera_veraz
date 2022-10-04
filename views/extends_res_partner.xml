@@ -43,7 +43,7 @@
 								</field>
 							</group>
 							<group col="1">
-								<!-- <button string="Ver cuestionario actual" name="ver_cuestionario_actual" type="object" class="oe_highlight"/> -->
+								<button string="Ver cuestionario actual" name="ver_cuestionario_actual" type="object" class="oe_highlight"/>
 							</group>
 						</group>
 						<group string="Informes historicos" col="2">
