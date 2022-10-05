@@ -212,11 +212,15 @@ class ExtendsResPartnerVeraz(models.Model):
 	def button_solicitar_informe_veraz(self):
 		self.solicitar_informe_veraz()
 
-	@api.one
-	def button_obtener_cuestionario_veraz(self):
+	def obtener_cuestionario_veraz(self):
 		cuestionario_id = self.env['financiera.veraz.cuestionario'].create({'partner_id': self.id})
 		self.veraz_cuestionario_id = cuestionario_id.id
 		cuestionario_id.obtener_preguntas()
+		return cuestionario_id
+
+	@api.one
+	def button_obtener_cuestionario_veraz(self):
+		self.obtener_cuestionario_veraz()
 
 	@api.multi
 	def ver_cuestionario_actual(self):
