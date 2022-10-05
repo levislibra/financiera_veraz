@@ -207,6 +207,7 @@ class FinancieraVerazCuestionario(models.Model):
 			self.score = data['payload']['score']
 			self.transaction_state_description = data['payload']['transactionStateDescription']
 			self.transaction_state_code = data['payload']['transactionStateCode']
+		return self.transaction_state_code
 
 	# Funciones para api
 
