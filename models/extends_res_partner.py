@@ -216,7 +216,7 @@ class ExtendsResPartnerVeraz(models.Model):
 		cuestionario_id = self.env['financiera.veraz.cuestionario'].create({'partner_id': self.id})
 		self.veraz_cuestionario_id = cuestionario_id.id
 		cuestionario_id.obtener_preguntas()
-		return cuestionario_id
+		return cuestionario_id.id
 
 	@api.one
 	def button_obtener_cuestionario_veraz(self):
