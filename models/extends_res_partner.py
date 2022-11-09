@@ -7,8 +7,7 @@ import json
 import base64
 
 ENDPOINT_VERAZ_TEST = 'https://api.uat.latam.equifax.com/business/integration-api-efx/v1/wserv'
-ENDPOINT_VERAZ_PRODUCCION = 'https://api.dev.latam.equifax.com/business/integration-api-efx/v1/wserv'
-# ENDPOINT_VERAZ_VID = ''
+ENDPOINT_VERAZ_PRODUCCION = 'https://api.latam.equifax.com/business/integration-api-efx/v1/wserv'
 
 VARIABLES_VERAZ = {
 	'nombre': 'nombre',
@@ -50,7 +49,6 @@ class ExtendsResPartnerVeraz(models.Model):
 		veraz_configuracion_id = self.company_id.veraz_configuracion_id
 		if veraz_configuracion_id:
 			token = veraz_configuracion_id.get_token_veraz_informes()
-			print("TOKEN: ", token)
 			headers = {
 				'Authorization': "Bearer " + token,
 				'Content-Type': 'application/json'
@@ -95,18 +93,15 @@ class ExtendsResPartnerVeraz(models.Model):
 					}
 				}
 			}
-			response = requests.post(ENDPOINT_VERAZ_TEST, json=data, headers=headers)
+			endpoint_veraz = ENDPOINT_VERAZ_PRODUCCION if veraz_configuracion_id.state == 'produccion' else ENDPOINT_VERAZ_TEST
+			response = requests.post(endpoint_veraz, json=data, headers=headers)
 			data = response.json()
-			# print('data', data)
 			if response.status_code != 200:
 				raise ValidationError("Error en la consulta de informe Veraz: "+data['description'])
 			else:
-				print('*************')
 				list_values = []
 				variables = data['applicants'][0]['SMARTS_RESPONSE']['VariablesDeSalida'].iteritems()
-				print('variables: ', variables)
 				for variable in variables:
-					print('variable', variable)
 					variable_nombre, variable_valor = variable
 					variable_values = {
 						'partner_id': self.id,

@@ -63,13 +63,11 @@ class FinancieraVerazCuestionario(models.Model):
 			'gender': sexo,
 			# 'format': 'json',
 		}
-		print('params', params)
 		response = requests.post(
 			ENDPOINT_VERAZ_VID,
 			json=params,
 			headers=headers)
 		data = response.json()
-		# print('data: ', data)
 		if response.status_code != 200 or ('errors' in data and data['errors']):
 			raise ValidationError("Error en la obtencion del cuestionario Veraz: " + data['errors'][0]['message'])
 		else:
@@ -77,13 +75,9 @@ class FinancieraVerazCuestionario(models.Model):
 			self.transaction_state_description = data['payload']['transactionStateDescription']
 			self.transaction_state_code = data['payload']['transactionStateCode']
 			cuestionario = data['payload']['questionnaire']
-			print('cuestionario id', cuestionario['id'])
 			self.name_cuestionario = cuestionario['name']
 			self.id_cuestionario_generado = cuestionario['id']
-			# print('questionnaire', cuestionario)
 			for pregunta in cuestionario['questionsOfGeneratedQuestionnaire']:
-				print('pregunta', pregunta)
-				print('***************************')
 				self.agregar_pregunta(pregunta['id'], pregunta['description'], pregunta['options'])
 
 	@api.one
@@ -121,7 +115,6 @@ class FinancieraVerazCuestionario(models.Model):
 	@api.multi
 	def ver_pregunta_actual(self):
 		self.ensure_one()
-		print('pregunta_actual_id', self.pregunta_actual_id)
 		view_id = self.env.ref('financiera_veraz.financiera_veraz_cuestionario_pregunta_form', False)
 		return {
 			'name': 'Pregunta de ID Validator',
@@ -170,14 +163,12 @@ class FinancieraVerazCuestionario(models.Model):
 			self.state_pregunta = 'finalizado'
 
 	def get_dict_respuestas(self):
-		print('_get_dict_respuestas')
 		respuestas_dict = []
 		for pregunta_id in self.pregunta_ids:
 			respuestas_dict.append({
 				'idQuestion': pregunta_id.id_pregunta,
 				'idOption': pregunta_id.opcion_ids[pregunta_id.id_respuesta].id_opcion,
 			})
-		print('respuestas_dict', respuestas_dict)
 		return respuestas_dict
 
 
@@ -194,13 +185,11 @@ class FinancieraVerazCuestionario(models.Model):
 			'idTransaction': self.id_transaccion,
 			'questionnaireResponse': self.get_dict_respuestas(),
 		}
-		print('params', params)
 		response = requests.post(
 			ENDPOINT_VERAZ_VID_ANSWERS,
 			json=params,
 			headers=headers)
 		data = response.json()
-		print('data: ', data)
 		if response.status_code != 200 or ('errors' in data and data['errors']):
 			raise ValidationError("Error en la obtencion del cuestionario Veraz: " + data['errors'][0]['message'])
 		else:
@@ -248,7 +237,6 @@ class FinancieraVerazCuestionario(models.Model):
 			pregunta_dict['opcion_ids'] = opcion_list_dict
 			pregunta_list_dict.append(pregunta_dict)
 		cuestionario_dict['pregunta_ids'] = pregunta_list_dict
-		print('cuestionario_dict', cuestionario_dict)
 		return cuestionario_dict
 	
 	@api.one

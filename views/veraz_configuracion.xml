@@ -22,6 +22,8 @@
           <header>
             <button name="test_conexion_idvalidator" string="Probar conexión Id Validator" type="object" />
             <button name="test_conexion_informes" string="Probar conexión Informes" type="object" />
+            <button name="change_state" string="Cambiar estado" type="object" confirm="Seguro que desea realizar la accion?"/>
+            <field name="state" widget="statusbar"/>
           </header>
           <sheet>
             <group>
@@ -29,7 +31,8 @@
                 <field name="company_id" groups="base.group_erp_manager" />
                 <field name="name" />
                 <separator string="Información conexión" colspan="2" />
-                <field name="token"/>
+                <field name="client_id_test"/>
+                <field name="client_secret_test"/>
                 <field name="client_id"/>
                 <field name="client_secret"/>
                 <field name="matriz"/>
