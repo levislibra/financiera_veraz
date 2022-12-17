@@ -196,6 +196,9 @@ class FinancieraVerazCuestionario(models.Model):
 			self.score = data['payload']['score']
 			self.transaction_state_description = data['payload']['transactionStateDescription']
 			self.transaction_state_code = data['payload']['transactionStateCode']
+			if self.transaction_state_code == 1:
+				self.partner_id.confirm()
+				self.partner_id.state = 'validated'
 		return self.transaction_state_code
 
 	# Funciones para api
