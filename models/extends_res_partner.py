@@ -122,12 +122,15 @@ class ExtendsResPartnerVeraz(models.Model):
 	def enriquecer_partner_veraz(self):
 		veraz_configuracion_id = self.company_id.veraz_configuracion_id
 		vals = {}
-		variable_apellido_id = False
-		variable_nombre_id = False
 		if veraz_configuracion_id.asignar_nombre:
-			variable_nombre_id = self.veraz_variable_ids.filtered(lambda x: x.name == VARIABLES_VERAZ['nombre'])
-			if variable_apellido_id and variable_nombre_id:
-				vals['name'] = variable_nombre_id.valor
+			variable_apellido_nombre_id = self.veraz_variable_ids.filtered(lambda x: x.name == VARIABLES_VERAZ['nombre'])
+			# if variable_apellido_id and variable_nombre_id:
+			apellido_nombre = variable_apellido_nombre_id.valor
+			if apellido_nombre.split(',') and len(apellido_nombre.split(',')) > 1:
+				vals['app_nombre'] = apellido_nombre.split(',')[0]
+				vals['app_apellido'] = apellido_nombre.split(',')[1]
+			print("variable_nombre_id: ", variable_apellido_nombre_id.valor)
+			vals['name'] = variable_apellido_nombre_id.valor.replace(',', ' ')
 		if veraz_configuracion_id.asignar_direccion:
 			variable_direccion_id = self.veraz_variable_ids.filtered(lambda x: x.name == VARIABLES_VERAZ['direccion'])
 			if variable_direccion_id:
