@@ -127,8 +127,8 @@ class ExtendsResPartnerVeraz(models.Model):
 			# if variable_apellido_id and variable_nombre_id:
 			apellido_nombre = variable_apellido_nombre_id.valor
 			if apellido_nombre.split(',') and len(apellido_nombre.split(',')) > 1:
-				vals['app_nombre'] = apellido_nombre.split(',')[0]
-				vals['app_apellido'] = apellido_nombre.split(',')[1]
+				vals['app_apellido'] = apellido_nombre.split(',')[0]
+				vals['app_nombre'] = apellido_nombre.split(',')[1]
 			print("variable_nombre_id: ", variable_apellido_nombre_id.valor)
 			vals['name'] = variable_apellido_nombre_id.valor.replace(',', ' ')
 		if veraz_configuracion_id.asignar_direccion:
