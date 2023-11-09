@@ -6,8 +6,8 @@ import requests
 import json
 import base64
 
-ENDPOINT_VERAZ_TEST = 'https://interconnect-uat.7x24.com.ar/execute'
-ENDPOINT_VERAZ_PRODUCCION = 'https://interconnect-prd.7x24.com.ar/execute'
+ENDPOINT_VERAZ_TEST = 'https://api.uat.latam.equifax.com/business/integration-api-efx/v1/wserv'
+ENDPOINT_VERAZ_PRODUCCION = 'https://api.latam.equifax.com/business/integration-api-efx/v1/wserv'
 
 VARIABLES_VERAZ = {
 	'nombre': 'nombre',

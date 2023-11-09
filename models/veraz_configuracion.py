@@ -6,8 +6,8 @@ import requests
 import json
 import base64
 
-ENDPOINT_VERAZ_TOKEN_TEST = "https://interconnect-uat.7x24.com.ar/token"
-ENDPOINT_VERAZ_TOKEN_PRODUCCION = "https://interconnect-prd.7x24.com.ar/token"
+ENDPOINT_VERAZ_TOKEN_TEST = "https://api.uat.latam.equifax.com/v2/oauth/token"
+ENDPOINT_VERAZ_TOKEN_PRODUCCION = "https://api.latam.equifax.com/v2/oauth/token"
 
 ENDPOINT_VERAZ_SCOPE = 'https://api.latam.equifax.com/business/integration-api-efx/v1'
 
