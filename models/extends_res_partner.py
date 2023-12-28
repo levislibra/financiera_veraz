@@ -6,8 +6,11 @@ import requests
 import json
 import base64
 
-ENDPOINT_VERAZ_TEST = 'https://api.uat.latam.equifax.com/business/integration-api-efx/v1/wserv'
-ENDPOINT_VERAZ_PRODUCCION = 'https://api.latam.equifax.com/business/integration-api-efx/v1/wserv'
+# ENDPOINT_VERAZ_TEST = 'https://api.uat.latam.equifax.com/business/integration-api-efx/v1/wserv'
+# ENDPOINT_VERAZ_PRODUCCION = 'https://api.latam.equifax.com/business/integration-api-efx/v1/wserv'
+
+ENDPOINT_VERAZ_TEST = 'https://interconnect-uat.7x24.com.ar/execute'
+ENDPOINT_VERAZ_PRODUCCION = 'https://interconnect-prd.7x24.com.ar/execute'
 
 VARIABLES_VERAZ = {
 	'nombre': 'nombre',
@@ -94,8 +97,12 @@ class ExtendsResPartnerVeraz(models.Model):
 				}
 			}
 			endpoint_veraz = ENDPOINT_VERAZ_PRODUCCION if veraz_configuracion_id.state == 'produccion' else ENDPOINT_VERAZ_TEST
+			print("endpoint_veraz: ", endpoint_veraz)
 			response = requests.post(endpoint_veraz, json=data, headers=headers)
 			data = response.json()
+			print("data ===: ", data)
+			print("response.status_code: ", response.status_code)
+			print("data.description: ", data['description'])
 			if response.status_code != 200:
 				raise ValidationError("Error en la consulta de informe Veraz: "+data['description'])
 			else:

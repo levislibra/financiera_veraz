@@ -1,92 +1,102 @@
 <openerp>
-  <data>
-
-    <!-- Financiera ROL configuracion -->
-
-    <record model="ir.ui.view" id="financiera_veraz_conf_tree">
-      <field name="name">financiera.veraz.configuracion.tree</field>
-      <field name="model">financiera.veraz.configuracion</field>
-      <field name="arch" type="xml">
-        <tree create="false" delete="false">
-          <field name="name" />
-          <field name="company_id" groups="base.group_erp_manager" />
-        </tree>
-      </field>
-    </record>
-
-    <record id="financiera_veraz_conf_form" model="ir.ui.view">
-      <field name="name">financiera.veraz.configuracion.form</field>
-      <field name="model">financiera.veraz.configuracion</field>
-      <field name="arch" type="xml">
-        <form string="Configuracion" create="false" delete="false">
-          <header>
-            <button name="test_conexion_idvalidator" string="Probar conexión Id Validator" type="object" />
-            <button name="test_conexion_informes" string="Probar conexión Informes" type="object" />
-            <button name="change_state" string="Cambiar estado" type="object" confirm="Seguro que desea realizar la accion?"/>
-            <field name="state" widget="statusbar"/>
-          </header>
-          <sheet>
-            <group>
-              <group>
-                <field name="company_id" groups="base.group_erp_manager" />
-                <field name="name" />
-                <separator string="Información conexión" colspan="2" />
-                <field name="client_id_test"/>
-                <field name="client_secret_test"/>
-                <field name="client_id"/>
-                <field name="client_secret"/>
-                <field name="matriz"/>
-                <field name="usuario"/>
-                <field name="password"/>
-                <field name="sector"/>
-                <field name="sucursal"/>
-              </group>
-              <group>
-                <field name="ejecutar_cda_al_solicitar_informe" />
-                <field name="id_cuestionario" />
-              </group>
-            </group>
-            <group>
-              <group string="Asignar al perfil del cliente">
-                <field name="asignar_nombre" />
-                <field name="asignar_direccion" />
-                <field name="asignar_ciudad" />
-                <field name="asignar_cp" />
-                <field name="asignar_provincia" />
-                <field name="asignar_cuit" />
-                <field name="asignar_genero" />
-              </group>
-              <group string="Variables principales">
-                <field name="veraz_variable_1" />
-                <field name="veraz_variable_2" />
-                <field name="veraz_variable_3" />
-                <field name="veraz_variable_4" />
-                <field name="veraz_variable_5" />
-              </group>
-            </group>
-          </sheet>
-        </form>
-      </field>
-    </record>
-
-    <record model="ir.actions.act_window" id="financiera_veraz_action">
-      <field name="name">Configuracion</field>
-      <field name="res_model">financiera.veraz.configuracion</field>
-      <field name="view_mode">tree,form</field>
-      <field name="view_id" ref="financiera_veraz_conf_tree" />
-    </record>
-
-
-    <!-- Top menu item -->
-
-    <menuitem name="Veraz" id="menu_veraz" web_icon="financiera_veraz,static/description/icon.png" groups="financiera_veraz.manager" />
-
-    <!-- menu categories -->
-
-    <menuitem name="Configuracion" id="menu_config" sequence="30" parent="menu_veraz" />
-
-    <menuitem name="Configuracion" id="menu_config_action" sequence="1" parent="menu_config" action="financiera_veraz_action" />
-
-
-  </data>
+	<data>
+		
+		<!-- Financiera ROL configuracion -->
+		
+		<record model="ir.ui.view" id="financiera_veraz_conf_tree">
+			<field name="name">financiera.veraz.configuracion.tree</field>
+			<field name="model">financiera.veraz.configuracion</field>
+			<field name="arch" type="xml">
+				<tree create="false" delete="false">
+					<field name="name" />
+					<field name="company_id" groups="base.group_erp_manager" />
+				</tree>
+			</field>
+		</record>
+		
+		<record id="financiera_veraz_conf_form" model="ir.ui.view">
+			<field name="name">financiera.veraz.configuracion.form</field>
+			<field name="model">financiera.veraz.configuracion</field>
+			<field name="arch" type="xml">
+				<form string="Configuracion" create="false" delete="false">
+					<header>
+						<button name="test_conexion_idvalidator" string="Probar conexión Id Validator" type="object" />
+						<button name="test_conexion_informes" string="Probar conexión Informes" type="object" />
+						<button name="change_state" string="Cambiar estado" type="object" confirm="Seguro que desea realizar la accion?"/>
+						<field name="state" widget="statusbar"/>
+					</header>
+					<sheet>
+						<group>
+							<group>
+								<field name="company_id" groups="base.group_erp_manager" />
+								<field name="name" />
+								<separator string="Información conexión" colspan="2" />
+								<field name="client_id_test"/>
+								<field name="client_secret_test"/>
+								<field name="client_id"/>
+								<field name="client_secret"/>
+								<!-- id validator -->
+								idvalidator_client_id_test = fields.Char('ID Validator - Cliente ID Test')
+								idvalidator_client_secret_test = fields.Char('ID Validator - Cliente Secret Test')
+								idvalidator_client_id = fields.Char('ID Validator - Cliente ID')
+								idvalidator_client_secret = fields.Char('ID Validator - Cliente Secret')
+								<field name="idvalidator_client_id_test"/>
+								<field name="idvalidator_client_secret_test"/>
+								<field name="idvalidator_client_id"/>
+								<field name="idvalidator_client_secret"/>
+								<!-- otra info -->
+								<field name="matriz"/>
+								<field name="usuario"/>
+								<field name="password"/>
+								<field name="sector"/>
+								<field name="sucursal"/>
+							</group>
+							<group>
+								<field name="ejecutar_cda_al_solicitar_informe" />
+								<field name="id_cuestionario" />
+							</group>
+						</group>
+						<group>
+							<group string="Asignar al perfil del cliente">
+								<field name="asignar_nombre" />
+								<field name="asignar_direccion" />
+								<field name="asignar_ciudad" />
+								<field name="asignar_cp" />
+								<field name="asignar_provincia" />
+								<field name="asignar_cuit" />
+								<field name="asignar_genero" />
+							</group>
+							<group string="Variables principales">
+								<field name="veraz_variable_1" />
+								<field name="veraz_variable_2" />
+								<field name="veraz_variable_3" />
+								<field name="veraz_variable_4" />
+								<field name="veraz_variable_5" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="financiera_veraz_action">
+			<field name="name">Configuracion</field>
+			<field name="res_model">financiera.veraz.configuracion</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="financiera_veraz_conf_tree" />
+		</record>
+		
+		
+		<!-- Top menu item -->
+		
+		<menuitem name="Veraz" id="menu_veraz" web_icon="financiera_veraz,static/description/icon.png" groups="financiera_veraz.manager" />
+		
+		<!-- menu categories -->
+		
+		<menuitem name="Configuracion" id="menu_config" sequence="30" parent="menu_veraz" />
+		
+		<menuitem name="Configuracion" id="menu_config_action" sequence="1" parent="menu_config" action="financiera_veraz_action" />
+		
+		
+	</data>
 </openerp>

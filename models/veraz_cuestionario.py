@@ -4,9 +4,11 @@ from openerp import models, fields, api
 from openerp.exceptions import UserError, ValidationError
 import requests
 
-ENDPOINT_VERAZ_VID = 'https://api-idvalidator.equifax.com.ar/v1/s2s/clientID/IDCLEXP/validation/full'
+# ENDPOINT_VERAZ_VID = 'https://api-idvalidator.equifax.com.ar/v1/s2s/clientID/IDCLEXP/validation/full'
+# ENDPOINT_VERAZ_VID_ANSWERS = 'https://api-idvalidator.equifax.com.ar/v1/s2s/clientID/IDCLEXP/validation/questionnaire/answers'
 
-ENDPOINT_VERAZ_VID_ANSWERS = 'https://api-idvalidator.equifax.com.ar/v1/s2s/clientID/IDCLEXP/validation/questionnaire/answers'
+ENDPOINT_VERAZ_VID = 'https://id3-prd.7x24.com.ar/v1/s2s/clientID/IDCLEXP/validation/full'
+ENDPOINT_VERAZ_VID_ANSWERS = 'https://id3-prd.7x24.com.ar/v1/s2s/clientID/IDCLEXP/validation/questionnaire/answers'
 
 class FinancieraVerazCuestionario(models.Model):
 	_name = 'financiera.veraz.cuestionario'
@@ -68,6 +70,9 @@ class FinancieraVerazCuestionario(models.Model):
 			json=params,
 			headers=headers)
 		data = response.json()
+		print("********************************************")
+		print("response: ", response)
+		print("response.text: ", response.text)
 		if response.status_code != 200 or ('errors' in data and data['errors']):
 			raise ValidationError("Error en la obtencion del cuestionario Veraz: " + data['errors'][0]['message'])
 		else:
